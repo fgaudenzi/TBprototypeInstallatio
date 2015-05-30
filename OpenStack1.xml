@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <test:testBasedCertifcationModel xmlns:sch="http://www.ascc.net/xml/schematron"
+        xmlns:ec="http://slasoi.org/monitoring/citymonitor/xmlrule"
+        xmlns:sla="http://www.slaatsoi.eu/slamodel"
+        xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:cm="http://www.cumulus.org/certificate/model"
+        xmlns:test="http://www.cumulus.org/certificate/model/test"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.cumulus.org/certificate/model/test file:/Users/iridium/Jobs/testManager/CumulusTestManager/XML_Repository/testbasedCM.xsd">
+        <CertificationModelID>cumulus:cm:id:test:010101</CertificationModelID>
+        <LifeCycle>
+            <InitialState stateId="not_issued"/>
+            <states>
+                <state>
+                    <atomicState stateId="not_issued" name="not issued"/>
+                </state>
+                <state>
+                    <atomicState stateId="issued" name="issued"/>
+                </state>
+                <state>
+                    <atomicState stateId="suspended" name="suspended"/>
+                </state>
+                <state>
+                    <atomicState stateId="expired" name="expired"/>
+                </state>
+                <state>
+                    <atomicState stateId="revoked" name="revoked"/>
+                </state>
+            </states>
+            <transitions>
+                <transition From="not_issued" To="issued">
+                    <WhenCondition>
+                        <Condition>
+                            <collectorCondition>cStorage</collectorCondition>
+                        </Condition> 
+                    </WhenCondition>
+                </transition>
+                <transition From="issued" To="revoked">
+                    <WhenCondition negated="true">
+                        <Condition>
+                            <collectorCondition>cStorage</collectorCondition>
+                        </Condition>   
+                    </WhenCondition>
+                </transition>
+                <transition From="revoked" To="issued">
+                    <WhenCondition>
+                        <Condition>
+                            <collectorCondition>cStorage</collectorCondition>
+                        </Condition> 
+                    </WhenCondition>
+                </transition>
+                
+                
+            </transitions>
+        </LifeCycle>
+        <Signature>
+            <Name>CumulusCA</Name>
+            <Role>TESTER</Role>
+        </Signature>
+
+        <ToC Id="Openstack-Unimi">
+            <CloudLayer>Infrastructure</CloudLayer>
+            <ConcreteToc>Openstack running at Unimi</ConcreteToc>
+            <TocDescription>IaaS cloud provider based on Openstack Icehouse</TocDescription>
+            <TocURI>http://159.149.70.50/dashboard/</TocURI>
+            <ToTs>
+                <ToT collectorRefID="ccertificate">
+                    <Interface stateRef="*">
+                         <type>Storage IaaS Interface</type>
+                        <call>Storage</call>
+                    </Interface>
+                </ToT>
+            </ToTs>
+        </ToC>
+
+
+        <SecurityProperty SecurityPropertyDefinition="The IaaS provide an Encrypted Storage">
+            <sProperty class="Storage-Confidentiality">
+                <propertyPerformance>
+                </propertyPerformance>
+                <propertyParameterList/>
+            </sProperty>
+        </SecurityProperty>
+
+
+
+
+
+        <CertificationModelTemplateID>cumulus:cm:template:test:1</CertificationModelTemplateID>
+        <Collectors>
+           
+            <AbstractCollector Id="1">
+                <TestCategory>Functionality.Input partitioning</TestCategory>
+                <TestType>Random Input</TestType>
+                <TestDescription>check Database</TestDescription>
+                <TestGenerationModelLink>www.cumulus-project.eu/db.sts</TestGenerationModelLink>
+                <TestAttributes>
+                    <TestAttribute>
+                        <ID>1</ID>
+                        <Name>testAttribute</Name>
+                        <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">atos</Value>
+                    </TestAttribute>
+                </TestAttributes>
+                <TestCases>
+                    <TestCase>
+                        <ID>1</ID>
+                        <Description>check storage</Description>
+                        <TestInstance Operation="configuration">
+                            <Input>url=openstack.unimi.it service=storage-cinder</Input>
+                        </TestInstance>
+                        <TestInstance Operation="storage">
+                            <Input>dev=sdaX type=enc</Input>
+                        </TestInstance>
+                    </TestCase>
+               </TestCases>
+            </AbstractCollector>
+            
+            <Collector Descriptor="Contorl privilegies on configuration File" Id="cStorage" isStatic="false" toDeploy="true">
+                <ConditionForSomministration>
+                    <DeltaTime>86400</DeltaTime>
+                </ConditionForSomministration>
+                <Aggregator AggregatorDescription="alltrue" transient="1">
+                    <TestMetrics>
+                        <TestMetric name="eachtesttrue">
+                            <expected>true</expected>
+                            <tested></tested>
+                            <operation>=</operation>
+                        </TestMetric>
+                    </TestMetrics>
+                </Aggregator>
+                <AbstractCollectorRef id="1">
+                     
+                   <TestCase>
+                        <ID>1</ID>
+                        <Description>check storage</Description>
+                        <TestInstance Operation="configuration">
+                            <Input>url=openstack.unimi.it service=storage-cinder</Input>
+                        </TestInstance>
+                        <TestInstance Operation="storage">
+                            <Input>dev=sdaX type=enc</Input>
+                        </TestInstance>
+                    </TestCase>
+               
+                </AbstractCollectorRef>
+            </Collector>
+            
+        </Collectors>
+    </test:testBasedCertifcationModel>

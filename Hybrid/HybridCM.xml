@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test:testBasedCertifcationModel xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns:ec="http://slasoi.org/monitoring/citymonitor/xmlrule"
+    xmlns:sla="http://www.slaatsoi.eu/slamodel"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:cm="http://www.cumulus.org/certificate/model"
+    xmlns:test="http://www.cumulus.org/certificate/model/test"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.cumulus.org/certificate/model/test file:/Users/iridium/Jobs/testManager/CumulusTestManager/XML_Repository/testbasedCM.xsd">
+    <CertificationModelID>cumulus:cm:id:test:141414</CertificationModelID>
+    <LifeCycle>
+        <InitialState stateId="not_issued"/>
+        <states>
+            <state>
+                <atomicState stateId="not_issued" name="not issued"/>
+            </state>
+            <state>
+                <atomicState stateId="issued" name="issued"/>
+            </state>
+            <state>
+                <atomicState stateId="suspended" name="suspended"/>
+            </state>
+            <state>
+                <atomicState stateId="expired" name="expired"/>
+            </state>
+            <state>
+                <atomicState stateId="revoked" name="revoked"/>
+            </state>
+        </states>
+        <transitions>
+            <transition From="not_issued" To="issued">
+                <WhenCondition>
+                    <Condition>
+                        <collectorCondition>cattack</collectorCondition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cmonitor</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                    </Condition> 
+                </WhenCondition>
+            </transition>
+            <transition From="issued" To="revoked">
+                <WhenCondition negated="true">
+                     <Condition>
+                        <collectorCondition>cattack</collectorCondition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cmonitor</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                    </Condition> 
+                </WhenCondition>
+            </transition>
+            <transition From="revoked" To="issued">
+                <WhenCondition>
+                     <Condition>
+                        <collectorCondition>cattack</collectorCondition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cmonitor</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                    </Condition> 
+                </WhenCondition>
+            </transition>
+            
+            
+        </transitions>
+    </LifeCycle>
+    <Signature>
+        <Name>CumulusCA</Name>
+        <Role>TESTER</Role>
+    </Signature>
+
+    <ToC Id="ehealth">
+        <CloudLayer>Service</CloudLayer>
+        <ConcreteToc>ehealth Pilo</ConcreteToc>
+        <TocDescription>providing ehealth services</TocDescription>
+        <TocURI>http://159.149.70.51/home</TocURI>
+        <ToTs>
+            <ToT collectorRefID="cattack">
+                <Interface stateRef="*">
+                    <type>Execute a DenialOfService on the service</type>
+                    <call>DOS</call>
+                </Interface>
+            </ToT>
+            <ToT collectorRefID="cmonitor">
+                <Interface stateRef="*">
+                    <type>monitoring DenialOfService Attack</type>
+                    <call>MonitoringProbe</call>
+                </Interface>
+            </ToT>
+        </ToTs>
+    </ToC>
+
+
+<SecurityProperty SecurityPropertyDefinition="The percentage of incidents that are remedied within a predefined time limit after discovery, over the total  number of incidents discovered. ">
+<sProperty class="SEF:incident-management-quality:percentage-of-timely-incident-resolutions">
+</sProperty>
+</SecurityProperty
+
+
+
+
+
+
+    <CertificationModelTemplateID>cumulus:cm:template:test:3</CertificationModelTemplateID>
+    <Collectors>
+       
+        <AbstractCollector Id="1">
+            <TestCategory>Functionality.Input partitioning</TestCategory>
+            <TestType>Random Input</TestType>
+            <TestDescription>minitoring DOS</TestDescription>
+            <TestGenerationModelLink>www.cumulus-project.eu/DOS.sts</TestGenerationModelLink>
+            <TestAttributes>
+                <TestAttribute>
+                    <ID>1</ID>
+                    <Name>testAttribute</Name>
+                    <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">welight</Value>
+                </TestAttribute>
+            </TestAttributes>
+            <TestCases>
+                <TestCase>
+                    <ID>1</ID>
+                    <Description>DOS </Description>
+                    <TestInstance Operation="0">
+                        <Input>monitorManagerURL=192.168.43.225 monitoringPort=8080 protocol=SOAP</Input>
+                    </TestInstance>
+                    <TestInstance Operation="connection">
+                        <Input>username=mm password=mm.PWS15</Input>
+                    </TestInstance>
+                    <TestInstance Operation="request">
+                        <Input>type=DOS property=SEF:incident-management-quality:percentage-of-timely-incident-resolutions</Input>
+                    </TestInstance>
+                </TestCase>
+           </TestCases>
+        </AbstractCollector>
+        <Collector Descriptor="monitoring DOS resistence" Id="cmonitor" isStatic="false" toDeploy="true" monitor="true">
+            <ConditionForSomministration>
+               
+            </ConditionForSomministration>
+            <Aggregator AggregatorDescription="alltrue" transient="1">
+                <TestMetrics>
+                    <TestMetric name="channel">
+                        <expected>true</expected>
+                        <tested></tested>
+                        <operation>=</operation>
+                    </TestMetric>
+                </TestMetrics>
+            </Aggregator>
+            <AbstractCollectorRef id="1">
+               <TestCase>
+                    <ID>1</ID>
+                    <Description>DOS </Description>
+                    <TestInstance Operation="0">
+                        <Input>monitorManagerURL=192.168.43.225 monitoringPort=8080 protocol=SOAP</Input>
+                    </TestInstance>
+                    <TestInstance Operation="connection">
+                        <Input>username=mm password=mm.PWS15</Input>
+                    </TestInstance>
+                    <TestInstance Operation="request">
+                        <Input>type=DOS property=SEF:incident-management-quality:percentage-of-timely-incident-resolutions</Input>
+                    </TestInstance>
+                </TestCase>
+          
+            </AbstractCollectorRef>
+        </Collector>
+        <Collector Descriptor="test DOS resistence" Id="cattack" isStatic="true" toDeploy="false">
+            <ConditionForSomministration>
+                <DeltaTime>86400</DeltaTime>
+            </ConditionForSomministration>
+            <Aggregator AggregatorDescription="alltrue" transient="1">
+                <TestMetrics>
+                    <TestMetric name="eachtesttrue">
+                        <expected>true</expected>
+                        <tested></tested>
+                        <operation>=</operation>
+                    </TestMetric>
+                </TestMetrics>
+            </Aggregator>
+            <AbstractCollectorRef id="0">
+                 
+             <TestCase>
+                        <ID>1</ID>
+                        <Description>check DOS</Description>
+                        <TestInstance Operation="configure">
+                            <Input>URL=http://159.149.70.51/home time=24m size=1000</Input>
+                        </TestInstance>
+                    </TestCase>
+
+           
+            </AbstractCollectorRef>
+        </Collector>
+         <AbstractCollector Id="0">
+            <TestCategory>Functionality.Input partitioning</TestCategory>
+            <TestType>Equivalence Partioning</TestType>
+            <TestDescription>check DOS resistence</TestDescription>
+            <TestGenerationModelLink>www.cumulus-project.eu/dos.sts</TestGenerationModelLink>
+            <TestAttributes>
+                <TestAttribute>
+                    <ID>1</ID>
+                    <Name>testAttribute</Name>
+                    <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DOS</Value>
+                </TestAttribute>
+            </TestAttributes>
+            
+
+            <TestCases>
+             <TestCase>
+                        <ID>1</ID>
+                        <Description>check DOS</Description>
+                        <TestInstance Operation="configure">
+                            <Input>URL=http://159.149.70.51/home time=24m size=1000</Input>
+                        </TestInstance>
+                    </TestCase>
+            </TestCases>
+        </AbstractCollector>
+    </Collectors>
+</test:testBasedCertifcationModel>
