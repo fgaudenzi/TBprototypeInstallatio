@@ -1,4 +1,4 @@
-Guide for Test Based Certification Tools
+# Guide for Test Based Certification Tools
 
 Authors: Filippo Gaudenzi
 
@@ -17,7 +17,10 @@ The three type of advanced certifications hosted here are:
 	- Composition of Certificates
 	- Incremental Certification
 
+Please, in order to interact with the TestManager SOAP interface, use Firefox and install SOA Client (https://addons.mozilla.org/it/firefox/addon/soa-client/)
 
+
+The Test Based Certification comes already with 2 Certificates inside
 
 
 Probes
