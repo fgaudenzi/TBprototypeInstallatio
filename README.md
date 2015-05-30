@@ -7,7 +7,7 @@ Dipartimento di Informatica Università degli Studi di Milano Crema, Italy, 2601
 
 This repositories hosts CMs to be used on the the prototype availabe as explained in D3.3 Annex.
 
-TestManager and TestAgent are available as VMs on the UMIL repository.
+TestManager and TestAgent are available as VMs on the UMIL ftp repository.
 Follow the guide on the annex to make them run.
 
 Once the whole system is up and running is possible to use the CMs here available, to see how advance certification process are managed and executed.
@@ -22,30 +22,13 @@ Please, in order to interact with the TestManager SOAP interface, use Firefox an
 ![alt text](https://raw.githubusercontent.com/fgaudenzi/TBprototypeInstallation/master/Others/SOA.png "Figure 1")Figure 1
 
 
-The Test Based Certification comes already with 2 Certificates inside
+The Test Manager comes alredy with 2 certificate stored in its Database. Both Certificate refers to the same proprety "Storage-confidentiality" and address two OpenStack deployment hosted at Unimi. The related CM are at:
+	[Openstack 1](https://raw.githubusercontent.com/fgaudenzi/TBprototypeInstallation/master/OpenStack1.xml)
+	[Openstack 2](https://raw.githubusercontent.com/fgaudenzi/TBprototypeInstallation/master/OpenStack1.xml)
+Openstack 1 satisfys the property, indeed the Certificate is in ISSUED state. 
+	It is possible to check it running the operation 6 : getCertificate_Testing from the SOA Client using as ID=1432910969401
+Openstack 2 doesn't satisfy the property, and its certificate is in REVOKED state.
+	It is possible to check it running the operation 6 : getCertificate_Testing from the SOA Client using as ID=1432911193779
 
 
-Probes
-	
-	Authentication Confidentiality
-		probe - cfile
-		probe - https_Driver
-
-	Storage Confidentiality
-		probe - testEncryption
-		probe - findClearMapper
-
-	Network Isolation
-		probe - sgnetwork	
-
-	Storage Performance
-		probe - writeReadVolumes
-
-	Service Performance
-		probe - novacinderUnderHD (Test_ambiente.sh+ciclo_richieste.sh)
-
-
-The Test Based Certification Framework is available at
-- Test Manager : https://github.com/fgaudenzi/testManager
-- Test Agent   : https://github.com/fgaudenzi/testAgent
-
+## Hybrid Certification
